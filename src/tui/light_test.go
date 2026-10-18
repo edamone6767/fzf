@@ -350,6 +350,26 @@ func TestLightRenderer(t *testing.T) {
 	assertEscSequence("\x1b[13~", "f3")
 	assertEscSequence("\x1b[14~", "f4")
 
+	// Kitty CSI-u
+	assertEscSequence("\x1b[127;5u", "ctrl-backspace")
+	assertEscSequence("\x1b[8;5u", "ctrl-backspace")
+	assertEscSequence("\x1b[127;3u", "alt-backspace")
+	assertEscSequence("\x1b[127;7u", "ctrl-alt-backspace")
+	assertEscSequence("\x1b[127;2u", "backspace")
+	assertEscSequence("\x1b[127;5:1u", "ctrl-backspace")
+	assertEscSequence("\x1b[32;5u", "ctrl-space")
+	assertEscSequence("\x1b[9;2u", "shift-tab")
+	assertEscSequence("\x1b[127;5ux", "ctrl-backspace")
+
+	// xterm modifyOtherKeys
+	assertEscSequence("\x1b[27;5;127~", "ctrl-backspace")
+	assertEscSequence("\x1b[27;5;8~", "ctrl-backspace")
+	assertEscSequence("\x1b[27;3;127~", "alt-backspace")
+	assertEscSequence("\x1b[27;7;127~", "ctrl-alt-backspace")
+	assertEscSequence("\x1b[27;2;127~", "backspace")
+	assertEscSequence("\x1b[27;5;32~", "ctrl-space")
+	assertEscSequence("\x1b[27;2;9~", "shift-tab")
+	assertEscSequence("\x1b[27;5;127~x", "ctrl-backspace")
 }
 
 func TestLightRendererScrollWheel(t *testing.T) {

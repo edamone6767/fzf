@@ -16,8 +16,6 @@ func TestUnknownEscapeSequence(t *testing.T) {
 		{"\x1b[70;5u", Invalid, 7}, // not Home, which its prefix \e[7 matches
 		{"\x1b[42;5u", Invalid, 7}, // nor End
 		{"\x1b[4;5~", Invalid, 6},
-		{"\x1b[127;5u", Invalid, 8},
-		{"\x1b[27;5;127~", Invalid, 11},
 		{"\x1b[57441;1u", Invalid, 10},
 		{"\x1b\x1b[97;5u", Invalid, 7}, // ALT prefixed, the first ESC is dropped
 
@@ -107,6 +105,8 @@ func TestUnknownEscapeSequence(t *testing.T) {
 		{"\x1b[200~", BracketedPasteBegin, 6},
 		{"\x1b[Z", ShiftTab, 3},
 		{"\x1bOA", Up, 3},
+		{"\x1b[127;5u", CtrlBackspace, 8},
+		{"\x1b[27;5;127~", CtrlBackspace, 11},
 		{"\x1b[12;34R", Invalid, 8},
 		{"\x1b[?2004;2$y", Invalid, 11},
 	} {
