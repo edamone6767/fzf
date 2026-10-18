@@ -406,6 +406,68 @@ func rxvtKeyEnd(b byte) bool {
 	return b == '~' || b == '$' || b == '^' || b == '@'
 }
 
+func parseCsiU(buf []byte, altPrefix bool) Event {
+	s := string(buf)
+	if idx := strings.IndexByte(s, ':'); idx >= 0 {
+		s = s[:idx]
+	}
+	parts := strings.Split(s, ";")
+	if len(parts) == 1 {
+		key := atoi(parts[0], -1)
+		if key >= 0 {
+			return csiUEvent(key, 1, altPrefix)
+		}
+	} else if len(parts) == 2 {
+		key := atoi(parts[0], -1)
+		mod := atoi(parts[1], 1)
+		if key >= 0 {
+			return csiUEvent(key, mod, altPrefix)
+		}
+	}
+	return Event{Invalid, 0, nil}
+}
+
+func parseModifyOtherKeys(buf []byte, altPrefix bool) Event {
+	parts := strings.Split(string(buf), ";")
+	if len(parts) == 2 {
+		mod := atoi(parts[0], -1)
+		key := atoi(parts[1], -1)
+		if mod >= 0 && key >= 0 {
+			return csiUEvent(key, mod, altPrefix)
+		}
+	}
+	return Event{Invalid, 0, nil}
+}
+
+func csiUEvent(key int, mod int, altPrefix bool) Event {
+	shift := (mod-1)&1 != 0
+	alt := altPrefix || (mod-1)&2 != 0 || (mod >= 9 && mod <= 16)
+	ctrl := (mod-1)&4 != 0
+
+	switch key {
+	case 127, 8:
+		if ctrl && alt {
+			return Event{CtrlAltBackspace, 0, nil}
+		}
+		if ctrl {
+			return Event{CtrlBackspace, 0, nil}
+		}
+		if alt {
+			return Event{AltBackspace, 0, nil}
+		}
+		return Event{Backspace, 0, nil}
+	case 32:
+		if ctrl {
+			return Event{CtrlSpace, 0, nil}
+		}
+	case 9:
+		if shift {
+			return Event{ShiftTab, 0, nil}
+		}
+	}
+	return Event{Invalid, 0, nil}
+}
+
 // csiIntroducer reports whether the byte after ESC starts a sequence that is
 // framed by a final byte. The parser routes CSI and SS3 through the same
 // parameterized subcases, so both are framed by csiEnd.
@@ -713,6 +775,22 @@ func (r *LightRenderer) parseEscSequence(sz *int) Event {
 			return Event{Invalid, 0, nil}
 		}
 		*sz = 3
+		if r.buffer[1] == '[' {
+			if end := csiEnd(r.buffer); end > 3 {
+				final := r.buffer[end-1]
+				if final == 'u' {
+					if ev := parseCsiU(r.buffer[2:end-1], alt); ev.Type != Invalid {
+						*sz = end
+						return ev
+					}
+				} else if final == '~' && bytes.HasPrefix(r.buffer[2:], []byte("27;")) {
+					if ev := parseModifyOtherKeys(r.buffer[5:end-1], alt); ev.Type != Invalid {
+						*sz = end
+						return ev
+					}
+				}
+			}
+		}
 		switch r.buffer[2] {
 		case 'D':
 			if alt {
