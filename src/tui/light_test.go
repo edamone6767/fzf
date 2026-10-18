@@ -350,6 +350,20 @@ func TestLightRenderer(t *testing.T) {
 	assertEscSequence("\x1b[13~", "f3")
 	assertEscSequence("\x1b[14~", "f4")
 
+	// Kitty CSI-u
+	assertEscSequence("\x1b[32;2u", "shift-space")
+	assertEscSequence("\x1b[32;5u", "ctrl-space")
+	assertEscSequence("\x1b[127;5u", "ctrl-backspace")
+	assertEscSequence("\x1b[8;5u", "ctrl-backspace")
+	assertEscSequence("\x1b[9;2u", "shift-tab")
+	assertEscSequence("\x1b[32;2ux", "shift-space")
+
+	// xterm modifyOtherKeys
+	assertEscSequence("\x1b[27;2;32~", "shift-space")
+	assertEscSequence("\x1b[27;5;32~", "ctrl-space")
+	assertEscSequence("\x1b[27;5;127~", "ctrl-backspace")
+	assertEscSequence("\x1b[27;2;9~", "shift-tab")
+	assertEscSequence("\x1b[27;2;32~x", "shift-space")
 }
 
 func TestLightRendererScrollWheel(t *testing.T) {

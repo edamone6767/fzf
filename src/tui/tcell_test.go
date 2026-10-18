@@ -93,6 +93,7 @@ func TestGetCharEventKey(t *testing.T) {
 		{giveKey{tcell.KeyCtrlSpace, rune(tcell.KeyCtrlSpace), tcell.ModCtrl}, wantKey{CtrlSpace, 0, nil}}, // fabricated
 		{giveKey{tcell.KeyNUL, rune(tcell.KeyNUL), tcell.ModNone}, wantKey{CtrlSpace, 0, nil}},             // fabricated, unhandled
 		{giveKey{tcell.KeyRune, ' ', tcell.ModCtrl}, wantKey{CtrlSpace, 0, nil}},                           // actual Ctrl+' '
+		{giveKey{tcell.KeyRune, ' ', tcell.ModShift}, wantKey{ShiftSpace, 0, nil}},                         // actual Shift+' '
 		{giveKey{tcell.KeyCtrlBackslash, rune(tcell.KeyCtrlBackslash), tcell.ModCtrl}, wantKey{CtrlBackSlash, 0, nil}},
 		{giveKey{tcell.KeyCtrlRightSq, rune(tcell.KeyCtrlRightSq), tcell.ModCtrl}, wantKey{CtrlRightBracket, 0, nil}},
 		{giveKey{tcell.KeyCtrlCarat, rune(tcell.KeyCtrlCarat), tcell.ModShift | tcell.ModCtrl}, wantKey{CtrlCaret, 0, nil}}, // fabricated
