@@ -685,6 +685,8 @@ func (r *FullscreenRenderer) GetChar(cancellable bool) Event {
 			// translate native key events to ascii control characters
 			case r == ' ' && ctrl:
 				return Event{CtrlSpace, 0, nil}
+			case r == ' ' && shift:
+				return Event{ShiftSpace, 0, nil}
 			// handle AltGr characters
 			case ctrlAlt:
 				return Event{Rune, r, nil} // dropping modifiers

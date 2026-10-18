@@ -182,9 +182,9 @@ func TestParseKeys(t *testing.T) {
 	check(tui.Left, "left")
 	check(tui.Right, "right")
 
-	pairs, _, _ = parseKeyChords("Tab,Ctrl-I,PgUp,page-up,pgdn,Page-Down,Home,End,Alt-BS,Alt-BSpace,shift-left,shift-right,btab,shift-tab,return,Enter,bspace", "")
-	if len(pairs) != 11 {
-		t.Error(11)
+	pairs, _, _ = parseKeyChords("Tab,Ctrl-I,PgUp,page-up,pgdn,Page-Down,Home,End,Alt-BS,Alt-BSpace,shift-left,shift-right,btab,shift-tab,return,Enter,bspace,shift-space", "")
+	if len(pairs) != 12 {
+		t.Error(12)
 	}
 	check(tui.Tab, "Ctrl-I")
 	check(tui.PageUp, "page-up")
@@ -195,6 +195,7 @@ func TestParseKeys(t *testing.T) {
 	check(tui.ShiftLeft, "shift-left")
 	check(tui.ShiftRight, "shift-right")
 	check(tui.ShiftTab, "shift-tab")
+	check(tui.ShiftSpace, "shift-space")
 	check(tui.Enter, "Enter")
 	check(tui.Backspace, "bspace")
 }

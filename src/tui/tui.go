@@ -116,6 +116,7 @@ const (
 	ShiftEnd
 	ShiftPageUp
 	ShiftPageDown
+	ShiftSpace
 
 	F1
 	F2

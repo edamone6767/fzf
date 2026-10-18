@@ -1239,6 +1239,8 @@ func parseKeyChords(str string, message string) (map[tui.Event]string, []tui.Eve
 			add(tui.ShiftPageUp)
 		case "shift-page-down":
 			add(tui.ShiftPageDown)
+		case "shift-space":
+			add(tui.ShiftSpace)
 		case "left-click":
 			add(tui.LeftClick)
 		case "right-click":
