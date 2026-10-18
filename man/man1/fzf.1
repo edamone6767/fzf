@@ -1438,9 +1438,13 @@ the command with \fB$SHELL \-c\fR if \fBSHELL\fR is set, otherwise with \fBsh
 \-c\fR, so in this case make sure that the command is POSIX-compliant.
 .TP
 .B FZF_DEFAULT_OPTS
-Default options.
+Default options. Note that the string is parsed like command-line arguments
+using shell word splitting, so values containing spaces, semicolons, or special
+characters should be properly escaped or quoted.
 .br
 e.g. \fBexport FZF_DEFAULT_OPTS="\-\-layout=reverse \-\-border \-\-cycle"\fR
+.br
+     \fBexport FZF_DEFAULT_OPTS="\-\-prompt='; '"\fR
 .TP
 .B FZF_DEFAULT_OPTS_FILE
 The location of the file that contains the default options.
