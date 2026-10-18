@@ -429,8 +429,11 @@ or `py`.
     - Default command to use when input is tty
     - e.g. `export FZF_DEFAULT_COMMAND='fd --type f'`
 - `FZF_DEFAULT_OPTS`
-    - Default options
+    - Default options. The string is parsed using shell word splitting, so
+      arguments containing spaces, semicolons, or special characters should be
+      properly quoted or escaped.
     - e.g. `export FZF_DEFAULT_OPTS="--layout=reverse --inline-info"`
+    - e.g. `export FZF_DEFAULT_OPTS="--prompt='; '"`
 - `FZF_DEFAULT_OPTS_FILE`
     - If you prefer to manage default options in a file, set this variable to
       point to the location of the file
